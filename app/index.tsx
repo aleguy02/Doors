@@ -1,6 +1,5 @@
-import { Text, View, Button } from 'react-native';
-import HomeScreen from '@/src/components/HomeScreen';
+import HomeScreen from '@/src/components/screens/HomeScreen';
 
-export default function Index() {
+export default function App() {
   return <HomeScreen has_scheduled_shows={false} />;
 }

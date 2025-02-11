@@ -2,9 +2,9 @@ import React from 'react';
 import { Text, View, Button } from 'react-native';
 
 // TODO: rename this
-type Foo = {
+interface Foo {
   has_scheduled_shows: Boolean;
-};
+}
 
 const HomeScreen = (props: Foo) => {
   if (!props.has_scheduled_shows) {
