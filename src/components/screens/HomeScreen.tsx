@@ -1,5 +1,7 @@
 import React from 'react';
-import { Text, View, Button } from 'react-native';
+import { Text, View, Pressable, ScrollView } from 'react-native';
+
+import Footer from '@/src/components/Footer';
 
 // TODO: rename this
 interface Foo {
@@ -7,22 +9,20 @@ interface Foo {
 }
 
 const HomeScreen = (props: Foo) => {
-  if (!props.has_scheduled_shows) {
-    return (
-      <View className="flex-1 gap-8 justify-start items-center py-10">
-        <Text>
-          Looks like you haven’t done any shows yet. Schedule a new show to get
-          started.
-        </Text>
-        <Button title="New Show" />
-      </View>
-    );
-  }
-
   return (
-    <View className="flex-1 gap-8 justify-start items-center py-10">
-      <Button title="New Show" />
-    </View>
+    <ScrollView>
+      <View className="flex-1 gap-8 justify-start items-center py-10">
+        {!props.has_scheduled_shows && (
+          <Text>
+            Looks like you haven’t done any shows yet. Schedule a new show to
+            get started.
+          </Text>
+        )}
+        <Pressable className="text-center bg-blue-500 px-5 py-3">
+          <Text className="text-xl text-white font-semibold">New Show</Text>
+        </Pressable>
+      </View>
+    </ScrollView>
   );
 };
 
