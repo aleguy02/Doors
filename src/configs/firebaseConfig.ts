@@ -1,7 +1,15 @@
-import { initializeApp } from 'firebase/app';
-import dotenv from 'dotenv';
+import { initializeApp, getApps } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 
-dotenv.config({ path: '.env' });
+import {
+  API_KEY,
+  AUTH_DOMAIN,
+  PROJECT_ID,
+  STORAGE_BUCKET,
+  MESSAGING_SENDER_ID,
+  APP_ID,
+} from '@env';
+
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
@@ -11,4 +19,12 @@ const firebaseConfig = {
   appId: process.env.APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
+/* Initialize firebaseApp only if it isn't already intialized
+ *
+ * We do this to avoid the following error:
+ * FirebaseError: Firebase: Firebase App named '[DEFAULT]' already exists with different options or config (app/duplicate-app).
+ */
+export const firebaseApp = !getApps().length
+  ? initializeApp(firebaseConfig)
+  : getApps()[0];
+export const firebaseAuth = getAuth(firebaseApp);
