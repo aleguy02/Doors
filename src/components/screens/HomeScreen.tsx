@@ -1,8 +1,6 @@
 import React from 'react';
 import { Text, View, Pressable, ScrollView } from 'react-native';
 
-import Footer from '@/src/components/Footer';
-
 // TODO: rename this
 interface Foo {
   has_scheduled_shows: Boolean;
