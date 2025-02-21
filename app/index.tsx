@@ -29,7 +29,7 @@ export default function Index() {
     setLoading(true);
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
-      console.log(response);
+      console.log('signInWithEmailAndPassword_response', response);
     } catch (error: any) {
       console.log(error);
       alert(
