@@ -1,5 +1,5 @@
 import { initializeApp, getApps } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { Auth, getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_API_KEY,
@@ -18,4 +18,4 @@ const firebaseConfig = {
 export const firebaseApp = !getApps().length
   ? initializeApp(firebaseConfig)
   : getApps()[0];
-export const firebaseAuth = getAuth(firebaseApp);
+export const firebaseAuth: Auth = getAuth(firebaseApp);
