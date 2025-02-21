@@ -1,4 +1,4 @@
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { User, onAuthStateChanged } from 'firebase/auth';
 
@@ -7,6 +7,7 @@ import { firebaseAuth } from '@/src/configs/firebaseConfig';
 
 // Display the sign in screen until user signs in
 export default function RootLayout() {
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -15,6 +16,14 @@ export default function RootLayout() {
       setUser(user);
     });
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      router.replace('/(tabs)');
+    } else {
+      router.replace('/');
+    }
+  }, [user]);
 
   return (
     <Stack initialRouteName="index">
