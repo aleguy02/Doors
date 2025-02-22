@@ -1,4 +1,4 @@
-import { initializeApp, getApps } from 'firebase/app';
+import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
 import { Auth, getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -15,7 +15,7 @@ const firebaseConfig = {
  * We do this to avoid the following error:
  * FirebaseError: Firebase: Firebase App named '[DEFAULT]' already exists with different options or config (app/duplicate-app).
  */
-export const firebaseApp = !getApps().length
+export const firebaseApp: FirebaseApp = !getApps().length
   ? initializeApp(firebaseConfig)
   : getApps()[0];
 export const firebaseAuth: Auth = getAuth(firebaseApp);
