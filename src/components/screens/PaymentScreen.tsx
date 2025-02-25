@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, Pressable, Text, ScrollView } from 'react-native';
 
 /* The array type is an object containing information about the specific payment platform

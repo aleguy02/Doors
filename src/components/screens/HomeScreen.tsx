@@ -1,4 +1,3 @@
-import React from 'react';
 import { Text, View, Pressable, ScrollView } from 'react-native';
 
 // TODO: rename this
