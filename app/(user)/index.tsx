@@ -1,5 +1,5 @@
-import { Text } from 'react-native';
+import UserSettingsScreen from '@/src/components/screens/UserSettingsScreen';
 
 export default function Index() {
-  return <Text>Hello World</Text>;
+  return <UserSettingsScreen />;
 }

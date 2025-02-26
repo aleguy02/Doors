@@ -28,6 +28,7 @@ export default function RootLayout() {
   return (
     <Stack initialRouteName="index">
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(user)" options={{ headerShown: false }} />
     </Stack>
   );
 }
