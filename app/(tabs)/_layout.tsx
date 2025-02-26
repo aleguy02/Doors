@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 
-import UserButton from '@/src/components/buttons/UserButton';
+import UserHeaderButton from '@/src/components/buttons/UserHeaderButton';
 
 export default function TabLayout() {
   return (
@@ -16,7 +16,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: '#C91517',
         tabBarInactiveTintColor: 'black',
         tabBarStyle: { backgroundColor: 'none', borderTopWidth: 0 },
-        headerRight: () => <UserButton />,
+        headerRight: () => <UserHeaderButton />,
       }}
     >
       <Tabs.Screen
