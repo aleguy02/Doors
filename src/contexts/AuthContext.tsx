@@ -51,15 +51,19 @@ export function AuthProvider({ children }: PropsWithChildren) {
     });
     return unsubscribeFunc;
   }, []);
-  // TODO: signing out still lets me swipe back to home screen. Fix
   useEffect(() => {
     if (loading) return;
 
     if (authState.sessionActive) {
       router.replace('/(tabs)');
     } else {
-      console.log('FROM USEEFFECT');
-      router.back();
+      /* Ensure complete navigation reset before directing to auth screen.
+       * Issue: Signing out replaced (user) with (auth), allowing users to swipe
+       * back to home while signed out. This forces a full reset to prevent that.
+       */
+      while (router.canGoBack()) {
+        router.back();
+      }
       router.replace('/(auth)');
     }
   }, [authState]);
@@ -121,6 +125,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
       setLoading(false);
     }
   };
+  /*
+   */
 
   const value = {
     authState: authState,
