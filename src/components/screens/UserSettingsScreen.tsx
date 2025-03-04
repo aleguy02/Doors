@@ -1,6 +1,10 @@
 import { View, Pressable, Text, Button, ScrollView } from 'react-native';
 
+import { useAuth } from '@/src/contexts/AuthContext';
+
 const UserSettingsScreen = () => {
+  const { signoutUser } = useAuth();
+
   return (
     <ScrollView>
       <View className="flex-1 gap-8 justify-start items-center py-10">
@@ -12,7 +16,7 @@ const UserSettingsScreen = () => {
             Link Existing Band
           </Text>
         </Pressable>
-        <Button title="Sign out" />
+        <Button title="Sign out" onPress={signoutUser} />
       </View>
     </ScrollView>
   );
