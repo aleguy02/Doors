@@ -27,7 +27,7 @@
 
 <h2 id="started">🚀 Getting started</h2>
 
-Follow these steps to set up Doors locally! Googling is encouraged if you get stuck on any step, or feel free to reach out to me!
+Follow these steps to set up Doors locally. Googling is encouraged if you get stuck on any step, or feel free to reach out to me directly!
 
 <h3>Prerequisites</h3>
 
@@ -63,7 +63,7 @@ npm run start
 
 Follow the instructions in your terminal to open Expo Go. If you are having trouble opening the app with `npm run start` try `npm run tunnel`.
 
-<h2 id="design">Architecture/Design</h2>
+<h2 id="design">⚙️ Architecture/Design</h2>
 
 [💡 Initial Brainstorm Page](https://whimsical.com/doors-flowmap-TSBHo3gc9ncG6JTnWDJgof)
 
