@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import { useAuth } from '@/src/contexts/AuthContext';
+import CustomButton from '@/src/components/buttons/CustomButton';
 
 const UserSettingsScreen = () => {
   const { signoutUser } = useAuth();
@@ -42,22 +43,17 @@ const UserSettingsScreen = () => {
               onChangeText={setBandName}
             />
 
-            {/* Clicking will create code then change modal to Band Code Modal */}
-            <Pressable className="text-center bg-blue-500 px-5 py-3">
-              <Text
-                className="text-xl text-white font-semibold"
-                onPress={() => {
-                  if (!bandName) {
-                    Alert.alert('Band name required');
-                  } else {
-                    // generate band object with unique band ID (define custom class for Band?)
-                    // link band object to user
-                  }
-                }}
-              >
-                Confirm
-              </Text>
-            </Pressable>
+            <CustomButton
+              text="Confirm"
+              onPress={() => {
+                if (!bandName) {
+                  Alert.alert('Band name required');
+                } else {
+                  // generate band object with unique band ID (define custom class for Band?)
+                  // link band object to user
+                }
+              }}
+            />
 
             {/* Close modal */}
             <Button
@@ -72,20 +68,12 @@ const UserSettingsScreen = () => {
       </Modal>
 
       <View className="flex-1 gap-8 justify-start items-center py-10">
-        <Pressable
-          className="text-center bg-blue-500 px-5 py-3"
+        <CustomButton
+          text="Create Band"
           onPress={() => setModalVisible(true)}
-        >
-          <Text className="text-xl text-white font-semibold">Create Band</Text>
-        </Pressable>
-        <Pressable className="text-center bg-blue-500 px-5 py-3">
-          <Text className="text-xl text-white font-semibold">
-            Link Existing Band
-          </Text>
-        </Pressable>
-        <Pressable className="text-center bg-blue-500 px-5 py-3">
-          <Text className="text-xl text-white font-semibold">Manage Bands</Text>
-        </Pressable>
+        />
+        <CustomButton text="Link Existing Band" onPress={() => {}} />
+        <CustomButton text="Manage Bands" onPress={() => {}} />
         <Button title="Sign out" onPress={signoutUser} />
       </View>
     </ScrollView>

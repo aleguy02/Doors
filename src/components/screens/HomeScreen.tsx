@@ -1,5 +1,7 @@
 import { Text, View, Pressable, ScrollView } from 'react-native';
 
+import CustomButton from '@/src/components/buttons/CustomButton';
+
 // TODO: rename this
 interface Foo {
   has_scheduled_shows: Boolean;
@@ -15,9 +17,7 @@ const HomeScreen = (props: Foo) => {
             get started.
           </Text>
         )}
-        <Pressable className="text-center bg-blue-500 px-5 py-3">
-          <Text className="text-xl text-white font-semibold">New Show</Text>
-        </Pressable>
+        <CustomButton text="New Show" onPress={() => {}} />
       </View>
     </ScrollView>
   );
