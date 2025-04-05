@@ -11,15 +11,21 @@ import {
 
 import { useAuth } from '@/src/contexts/AuthContext';
 import CustomButton from '@/src/components/buttons/CustomButton';
+import CreateBandModal from './CreateBandModal';
 
 const UserSettingsScreen = () => {
   const { signoutUser } = useAuth();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [bandName, setBandName] = useState('');
+  // modal visibility is passed as a prop to `CreateBandModal` -> visibility can be toggled in and out of the component
+  const [createModalVisible, setCreateModalVisible] = useState(false);
+  // const [bandName, setBandName] = useState('');
 
   return (
     <ScrollView>
-      <Modal
+      <CreateBandModal
+        modalVisible={createModalVisible}
+        setModalVisible={setCreateModalVisible}
+      />
+      {/* <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -54,7 +60,7 @@ const UserSettingsScreen = () => {
               }}
             />
 
-            {/* Close modal */}
+            {/* Close modal }
             <Button
               title="Cancel"
               onPress={() => {
@@ -64,12 +70,12 @@ const UserSettingsScreen = () => {
             />
           </View>
         </View>
-      </Modal>
+      </Modal> */}
 
       <View className="flex-1 gap-8 justify-start items-center py-10">
         <CustomButton
           text="Create Band"
-          onPress={() => setModalVisible(true)}
+          onPress={() => setCreateModalVisible(true)}
         />
         <CustomButton text="Link Existing Band" onPress={() => {}} />
         <CustomButton text="Manage Bands" onPress={() => {}} />
