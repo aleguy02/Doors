@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
   Alert,
   View,
-  Pressable,
   Text,
   Button,
   ScrollView,
