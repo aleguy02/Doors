@@ -1,4 +1,4 @@
-import { Text, View, Pressable, ScrollView } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 
 import CustomButton from '@/src/components/buttons/CustomButton';
 
