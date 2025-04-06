@@ -1,12 +1,33 @@
 import React, { useState } from 'react';
 import { Modal, View, Text, TextInput, Button, Alert } from 'react-native';
+import { addDoc, collection } from 'firebase/firestore';
+
 import CustomButton from '@/src/components/buttons/CustomButton';
+import { fireStoreDB } from '@/src/configs/firebaseConfig';
 
 const CreateBandModal: React.FC<{
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
 }> = ({ modalVisible, setModalVisible }) => {
   const [bandName, setBandName] = useState('');
+
+  const createNewBand = async () => {
+    if (!bandName) {
+      Alert.alert('Band name required');
+    } else {
+      console.log('creating band');
+      /* TODO: create schema/type for 'bands' object
+       * each band should have a unique ID, a name, and maybe a list of the uid's with "access" to that band
+       */
+      const temp = await addDoc(collection(fireStoreDB, 'bands'), {
+        bandName: bandName,
+      });
+      /* TODO: logic
+       * verify that band name does not already exist
+       * generate and return bandID to user
+       */
+    }
+  };
 
   return (
     <Modal
@@ -32,17 +53,7 @@ const CreateBandModal: React.FC<{
             onChangeText={setBandName}
           />
 
-          <CustomButton
-            text="Confirm"
-            onPress={() => {
-              if (!bandName) {
-                Alert.alert('Band name required');
-              } else {
-                // generate band object with unique band ID (define custom class for Band?)
-                // link band object to user
-              }
-            }}
-          />
+          <CustomButton text="Confirm" onPress={createNewBand} />
 
           {/* Close modal */}
           <Button
