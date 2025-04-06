@@ -6,7 +6,7 @@ import {
   FirebaseError,
 } from 'firebase/app';
 import { Auth, initializeAuth, getReactNativePersistence } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, Firestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_API_KEY,
@@ -28,4 +28,4 @@ export const firebaseApp: FirebaseApp = !getApps().length
 export const firebaseAuth: Auth = initializeAuth(firebaseApp, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
 });
-export const fireStoreDB = getFirestore(firebaseApp);
+export const fireStoreDB: Firestore = getFirestore(firebaseApp);
