@@ -7,5 +7,5 @@ export interface AuthContextType {
   loginUser: (email: string, password: string) => Promise<void>;
   signoutUser: () => Promise<void>;
   isLoading: boolean;
-  fireStoreDB: Firestore | null;
+  fireStoreDB: Firestore;
 }

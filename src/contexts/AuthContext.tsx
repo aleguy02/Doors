@@ -12,10 +12,12 @@ import {
   User,
   signOut,
 } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import { useRouter } from 'expo-router';
 
 import { firebaseAuth, fireStoreDB } from '@/src/configs/firebaseConfig';
 import { AuthContextType } from '../types/AuthContextType';
+import { FirestoreUserType } from '../types/FirestoreUserType';
 
 // Functions are required by AuthContextType, so default them to empty functions
 const AuthContext = createContext<AuthContextType>({
@@ -25,7 +27,7 @@ const AuthContext = createContext<AuthContextType>({
   signoutUser: async () => {},
   isLoading: false,
   // TODO: I'm not sure if this is the best/most secure way to do this. Should it start as null?
-  fireStoreDB: null,
+  fireStoreDB: fireStoreDB,
 });
 
 export function useAuth() {
@@ -99,6 +101,12 @@ export function AuthProvider({ children }: PropsWithChildren) {
       );
       console.log('createUserWithEmailAndPassword_response', response);
       setAuthState({ user: response.user, sessionActive: true });
+
+      const user_data: FirestoreUserType = {
+        band_ids: [],
+        band_names: [],
+      };
+      await setDoc(doc(fireStoreDB, 'users', response.user.uid), user_data);
     } catch (error: any) {
       console.log(error);
       alert(

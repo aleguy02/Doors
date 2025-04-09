@@ -28,6 +28,7 @@ const CreateBandModal: React.FC<{
 
         // band id = createBandDocument(band name, uid)
         const band_doc = await addDoc(collection(fireStoreDB, 'bands'), {
+          // I think this error can be safely ignored for now
           bandName: bandName,
         });
         console.log(band_doc.id);
