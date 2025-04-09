@@ -14,7 +14,7 @@ import {
 } from 'firebase/auth';
 import { useRouter } from 'expo-router';
 
-import { firebaseAuth } from '@/src/configs/firebaseConfig';
+import { firebaseAuth, fireStoreDB } from '@/src/configs/firebaseConfig';
 import { AuthContextType } from '../types/AuthContextType';
 
 // Functions are required by AuthContextType, so default them to empty functions
@@ -24,6 +24,8 @@ const AuthContext = createContext<AuthContextType>({
   loginUser: async () => {},
   signoutUser: async () => {},
   isLoading: false,
+  // TODO: I'm not sure if this is the best/most secure way to do this. Should it start as null?
+  fireStoreDB: null,
 });
 
 export function useAuth() {
@@ -134,6 +136,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     loginUser: loginExistingUser,
     signoutUser: signOutUser,
     isLoading: loading,
+    fireStoreDB: fireStoreDB,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

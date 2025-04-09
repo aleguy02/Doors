@@ -3,35 +3,34 @@ import { Modal, View, Text, TextInput, Button, Alert } from 'react-native';
 import { addDoc, collection } from 'firebase/firestore';
 
 import CustomButton from '@/src/components/buttons/CustomButton';
-import { fireStoreDB } from '@/src/configs/firebaseConfig';
+import { useAuth } from '@/src/contexts/AuthContext';
 
 const CreateBandModal: React.FC<{
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
 }> = ({ modalVisible, setModalVisible }) => {
+  const { fireStoreDB } = useAuth();
   const [bandName, setBandName] = useState('');
+  // const [modalState, setModalState] = useState('default');
 
   const createNewBand = async () => {
     try {
       if (!bandName) {
         throw new Error('Band name required');
       } else {
-        console.log('creating band');
         /* TODO: create schema/type for 'bands' object
          * each band should have a unique ID, a name, and maybe a list of the uid's with "access" to that band
          */
-        const temp = await addDoc(collection(fireStoreDB, 'bands'), {
-          bandName: bandName,
-        });
-        console.log(temp);
-        /* TODO: logic
-         * verify that band name does not already exist in user/band-names
-         * generate and return bandID to user
-         */
+
+        /* TODO: logic */
         // check that band name is not taken already
         // if taken, throw error, serve message to user, and abort
 
         // band id = createBandDocument(band name, uid)
+        const band_doc = await addDoc(collection(fireStoreDB, 'bands'), {
+          bandName: bandName,
+        });
+        console.log(band_doc.id);
         // add band name to taken-band-names
       }
     } catch (error: any) {
