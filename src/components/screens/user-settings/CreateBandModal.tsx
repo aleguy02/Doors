@@ -12,20 +12,31 @@ const CreateBandModal: React.FC<{
   const [bandName, setBandName] = useState('');
 
   const createNewBand = async () => {
-    if (!bandName) {
-      Alert.alert('Band name required');
-    } else {
-      console.log('creating band');
-      /* TODO: create schema/type for 'bands' object
-       * each band should have a unique ID, a name, and maybe a list of the uid's with "access" to that band
-       */
-      const temp = await addDoc(collection(fireStoreDB, 'bands'), {
-        bandName: bandName,
-      });
-      /* TODO: logic
-       * verify that band name does not already exist
-       * generate and return bandID to user
-       */
+    try {
+      if (!bandName) {
+        throw new Error('Band name required');
+      } else {
+        console.log('creating band');
+        /* TODO: create schema/type for 'bands' object
+         * each band should have a unique ID, a name, and maybe a list of the uid's with "access" to that band
+         */
+        const temp = await addDoc(collection(fireStoreDB, 'bands'), {
+          bandName: bandName,
+        });
+        console.log(temp);
+        /* TODO: logic
+         * verify that band name does not already exist in user/band-names
+         * generate and return bandID to user
+         */
+        // check that band name is not taken already
+        // if taken, throw error, serve message to user, and abort
+
+        // band id = createBandDocument(band name, uid)
+        // add band name to taken-band-names
+      }
+    } catch (error: any) {
+      console.error('Error creating band:', error.message);
+      Alert.alert(error.message);
     }
   };
 
