@@ -22,7 +22,7 @@
 
 - React Native
 - Nativewind
-- Firebase
+- Firebase/Firebase
 - Expo Go (development)
 
 <h2 id="started">🚀 Getting started</h2>
