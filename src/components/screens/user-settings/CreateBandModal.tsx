@@ -1,20 +1,32 @@
 import React, { useState } from 'react';
 import { Modal, View, Text, TextInput, Button, Alert } from 'react-native';
-import { addDoc, collection } from 'firebase/firestore';
+import {
+  getDoc,
+  addDoc,
+  collection,
+  doc,
+  updateDoc,
+  arrayUnion,
+} from 'firebase/firestore';
 
 import CustomButton from '@/src/components/buttons/CustomButton';
 import { useAuth } from '@/src/contexts/AuthContext';
+import { FirestoreUserType } from '@/src/types/FirestoreUserType';
+import { FirestoreBandType } from '@/src/types/FirestoreBandType';
 
 const CreateBandModal: React.FC<{
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
 }> = ({ modalVisible, setModalVisible }) => {
-  const { fireStoreDB } = useAuth();
+  const { fireStoreDB, authState } = useAuth();
   const [bandName, setBandName] = useState('');
   // const [modalState, setModalState] = useState('default');
 
   const createNewBand = async () => {
     try {
+      if (!authState.user) {
+        throw new Error('User is not authenticated.');
+      }
       if (!bandName) {
         throw new Error('Band name required');
       } else {
@@ -22,17 +34,40 @@ const CreateBandModal: React.FC<{
          * each band should have a unique ID, a name, and maybe a list of the uid's with "access" to that band
          */
 
-        /* TODO: logic */
-        // check that band name is not taken already
-        // if taken, throw error, serve message to user, and abort
+        // get user document
+        const doc_ref = doc(fireStoreDB, 'users', authState.user.uid);
+        const doc_snap = await getDoc(doc_ref);
+        if (!doc_snap.exists()) {
+          throw new Error('User doc not found');
+        }
 
-        // band id = createBandDocument(band name, uid)
+        // check if name is taken
+        const band_names: string[] = doc_snap.data().band_names;
+        if (band_names.includes(bandName)) {
+          throw new Error(
+            'You already have a band by that name. Please enter a different name'
+          );
+        }
+
+        // create new band document with name. This is done first so we can update user in one go
+        const band_payload: FirestoreBandType = {
+          name: bandName,
+          members: [authState.user.uid],
+        };
         const band_doc = await addDoc(collection(fireStoreDB, 'bands'), {
-          // I think this error can be safely ignored for now
-          bandName: bandName,
+          name: band_payload.name,
+          members: band_payload.members,
         });
-        console.log(band_doc.id);
-        // add band name to taken-band-names
+
+        // update user document with band name and band id
+        const user_payload: FirestoreUserType = {
+          band_names: [bandName],
+          band_ids: [band_doc.id],
+        };
+        await updateDoc(doc_ref, {
+          band_names: arrayUnion(...user_payload.band_names),
+          band_ids: arrayUnion(...user_payload.band_ids),
+        });
       }
     } catch (error: any) {
       console.error('Error creating band:', error.message);
