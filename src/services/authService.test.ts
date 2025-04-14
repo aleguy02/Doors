@@ -1,11 +1,6 @@
 import { createNewUserService } from './authService';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import {
-  setDoc,
-  doc,
-  DocumentReference,
-  DocumentData,
-} from 'firebase/firestore';
+import { setDoc, doc } from 'firebase/firestore';
 
 /* First, jest parses this file and sees that we're mocking firebase auth.
  * Then, when the file is compiled/executed, the import from firebase auth gets overriden to resolve to this mock object
