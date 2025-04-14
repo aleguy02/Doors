@@ -11,12 +11,21 @@ import {
  * Then, when the file is compiled/executed, the import from firebase auth gets overriden to resolve to this mock object
  */
 jest.mock('firebase/auth', () => {
-  return { createUserWithEmailAndPassword: jest.fn() };
+  return {
+    createUserWithEmailAndPassword: jest.fn(),
+    getReactNativePersistence: jest.fn(),
+    initializeAuth: () => {
+      return true;
+    },
+  };
 });
 jest.mock('firebase/firestore', () => {
   return {
     doc: jest.fn(),
     setDoc: jest.fn(),
+    getFirestore: () => {
+      return true;
+    },
   };
 });
 

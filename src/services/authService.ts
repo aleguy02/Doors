@@ -5,8 +5,8 @@ import {
   User,
 } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import { firebaseAuth, fireStoreDB } from '@/src/configs/firebaseConfig';
-import { FirestoreUserType } from '@/src/types/FirestoreUserType';
+import { firebaseAuth, fireStoreDB } from '../configs/firebaseConfig';
+import { FirestoreUserType } from '../types/FirestoreUserType';
 
 export async function loginExistingUserService(
   email: string,
