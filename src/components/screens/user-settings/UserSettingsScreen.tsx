@@ -20,10 +20,12 @@ const UserSettingsScreen = () => {
 
   return (
     <ScrollView>
+      {/* Modals are initially invisible */}
       <CreateBandModal
         modalVisible={createModalVisible}
         setModalVisible={setCreateModalVisible}
       />
+
       <View className="flex-1 gap-8 justify-start items-center py-10">
         <CustomButton
           text="Create Band"

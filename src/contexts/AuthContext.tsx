@@ -5,19 +5,16 @@ import {
   useEffect,
   type PropsWithChildren,
 } from 'react';
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  User,
-  signOut,
-} from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+import { onAuthStateChanged, User } from 'firebase/auth';
 import { useRouter } from 'expo-router';
 
 import { firebaseAuth, fireStoreDB } from '../configs/firebaseConfig';
 import { AuthContextType } from '../types/AuthContextType';
-import { FirestoreUserType } from '../types/FirestoreUserType';
+import {
+  loginExistingUserService,
+  createNewUserService,
+  signOutUserService,
+} from '../services/authService';
 
 // Functions are required by AuthContextType, so default them to empty functions
 const AuthContext = createContext<AuthContextType>({
@@ -42,7 +39,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }>({ user: null, sessionActive: false });
   const [loading, setLoading] = useState(true);
 
-  const auth = firebaseAuth;
+  // const auth = firebaseAuth;
 
   // occurs on component mount
   useEffect(() => {
@@ -73,13 +70,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }, [authState]);
 
   /* Auth Functions
+   * These are implemented with "service" helper functions. See `../services/README.md` for more information.
    */
   const loginExistingUser = async (email: string, password: string) => {
     setLoading(true);
     try {
-      const response = await signInWithEmailAndPassword(auth, email, password);
-      console.log('signInWithEmailAndPassword_response', response);
-      setAuthState({ user: response.user, sessionActive: true });
+      const user: User = await loginExistingUserService(email, password);
+      setAuthState({ user: user, sessionActive: true });
     } catch (error: any) {
       console.log(error);
       alert(
@@ -94,19 +91,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const createNewUser = async (email: string, password: string) => {
     setLoading(true);
     try {
-      const response = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      console.log('createUserWithEmailAndPassword_response', response);
-      setAuthState({ user: response.user, sessionActive: true });
-
-      const user_data: FirestoreUserType = {
-        band_ids: [],
-        band_names: [],
-      };
-      await setDoc(doc(fireStoreDB, 'users', response.user.uid), user_data);
+      const user: User = await createNewUserService(email, password);
+      setAuthState({ user: user, sessionActive: true });
     } catch (error: any) {
       console.log(error);
       alert(
@@ -121,8 +107,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const signOutUser = async () => {
     setLoading(true);
     try {
-      const response = await signOut(auth);
-      console.log('signOut_response', response);
+      await signOutUserService();
       setAuthState({ user: null, sessionActive: false });
     } catch (error: any) {
       console.log(error);
