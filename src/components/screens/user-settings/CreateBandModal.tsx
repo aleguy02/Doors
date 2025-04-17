@@ -9,10 +9,10 @@ import {
   arrayUnion,
 } from 'firebase/firestore';
 
-import CustomButton from '@/src/components/buttons/CustomButton';
-import { useAuth } from '@/src/contexts/AuthContext';
-import { FirestoreUserType } from '@/src/types/FirestoreUserType';
-import { FirestoreBandType } from '@/src/types/FirestoreBandType';
+import CustomButton from '../../buttons/CustomButton';
+import { useAuth } from '../../../contexts/AuthContext';
+import { FirestoreUserType } from '../../../types/FirestoreUserType';
+import { FirestoreBandType } from '../../../types/FirestoreBandType';
 
 const CreateBandModal: React.FC<{
   modalVisible: boolean;

@@ -9,8 +9,8 @@ import {
   TextInput,
 } from 'react-native';
 
-import { useAuth } from '@/src/contexts/AuthContext';
-import CustomButton from '@/src/components/buttons/CustomButton';
+import { useAuth } from '../../../contexts/AuthContext';
+import CustomButton from '../../buttons/CustomButton';
 import CreateBandModal from './CreateBandModal';
 
 const UserSettingsScreen = () => {

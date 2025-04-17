@@ -1,6 +1,6 @@
 import { View, ScrollView } from 'react-native';
 
-import CustomButton from '@/src/components/buttons/CustomButton';
+import CustomButton from '../buttons/CustomButton';
 
 /* The array type is an object containing information about the specific payment platform
  * such as name and redirect link

@@ -8,13 +8,13 @@ import {
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { useRouter } from 'expo-router';
 
-import { firebaseAuth, fireStoreDB } from '@/src/configs/firebaseConfig';
-import { AuthContextType } from '@/src/types/AuthContextType';
+import { firebaseAuth, fireStoreDB } from '../configs/firebaseConfig';
+import { AuthContextType } from '../types/AuthContextType';
 import {
   loginExistingUserService,
   createNewUserService,
   signOutUserService,
-} from '@/src/services/authService';
+} from '../services/authService';
 
 // Functions are required by AuthContextType, so default them to empty functions
 const AuthContext = createContext<AuthContextType>({
