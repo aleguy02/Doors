@@ -1,6 +1,6 @@
 import { Text, View, ScrollView } from 'react-native';
 
-import CustomButton from '@/src/components/buttons/CustomButton';
+import CustomButton from '../buttons/CustomButton';
 
 // TODO: rename this
 interface Foo {

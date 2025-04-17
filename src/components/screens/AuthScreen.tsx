@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-import { useAuth } from '@/src/contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 /* I recommend Simon Grimm's "Super Easy React Native AUTHENTICATION with Firebase 🔒" on YouTube to get started
  * with authentication in React Native

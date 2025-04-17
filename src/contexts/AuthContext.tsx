@@ -15,7 +15,7 @@ import {
 import { doc, setDoc } from 'firebase/firestore';
 import { useRouter } from 'expo-router';
 
-import { firebaseAuth, fireStoreDB } from '@/src/configs/firebaseConfig';
+import { firebaseAuth, fireStoreDB } from '../configs/firebaseConfig';
 import { AuthContextType } from '../types/AuthContextType';
 import { FirestoreUserType } from '../types/FirestoreUserType';
 
