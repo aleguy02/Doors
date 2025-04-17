@@ -16,18 +16,18 @@ jest.mock('firebase/auth', () => {
     createUserWithEmailAndPassword: jest.fn(),
     signInWithEmailAndPassword: jest.fn(),
     getReactNativePersistence: jest.fn(),
-    initializeAuth: () => {
+    initializeAuth: jest.fn(() => {
       return true;
-    },
+    }),
   };
 });
 jest.mock('firebase/firestore', () => {
   return {
     doc: jest.fn(),
     setDoc: jest.fn(),
-    getFirestore: () => {
+    getFirestore: jest.fn(() => {
       return true;
-    },
+    }),
   };
 });
 
@@ -37,7 +37,7 @@ afterEach(() => {
 });
 
 const mock_user = { uid: '123' };
-const mockument = {}; // as DocumentReference<DocumentData, DocumentData>;
+const mockument = {};
 
 /* ==== TESTS ==== */
 describe('createNewUserService', () => {
@@ -70,7 +70,7 @@ describe('createNewUserService', () => {
     expect(service_response).toBe(mock_user);
   });
 
-  test('Attempt invalid email or password', async () => {
+  test('Throws error if email or password is invalid', async () => {
     (createUserWithEmailAndPassword as jest.Mock).mockRejectedValue(
       new Error('Invalid email')
     );
@@ -102,7 +102,7 @@ describe('loginExistingUserService', () => {
     expect(service_response).toBe(mock_user);
   });
 
-  test('Attempt invalid email or password', async () => {
+  test('Throws error if email or password is invalid', async () => {
     (signInWithEmailAndPassword as jest.Mock).mockRejectedValue(
       new Error('Invalid email')
     );

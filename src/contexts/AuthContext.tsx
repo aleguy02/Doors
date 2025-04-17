@@ -39,7 +39,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }>({ user: null, sessionActive: false });
   const [loading, setLoading] = useState(true);
 
-  const auth = firebaseAuth;
+  // const auth = firebaseAuth;
 
   // occurs on component mount
   useEffect(() => {
