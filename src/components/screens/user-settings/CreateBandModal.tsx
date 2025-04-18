@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, TextInput, Button, Alert } from 'react-native';
+import {
+  Modal,
+  View,
+  Text,
+  TextInput,
+  Button,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import { createNewBandService } from '../../../services/bandService';
 
 import CustomButton from '../../buttons/CustomButton';
@@ -11,8 +19,12 @@ const CreateBandModal: React.FC<{
 }> = ({ modalVisible, setModalVisible }) => {
   const { fireStoreDB, authState } = useAuth();
   const [bandName, setBandName] = useState<string>('');
+  // I'm handling loading a little different here than I do in AuthScreen.tsx
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleCreateBand = async () => {
+    if (loading) return;
+    setLoading(true);
     try {
       if (!authState.user) {
         throw new Error('User is not authenticated');
@@ -21,6 +33,8 @@ const CreateBandModal: React.FC<{
     } catch (error: any) {
       console.error('Error creating band:', error.message);
       Alert.alert(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,7 +61,11 @@ const CreateBandModal: React.FC<{
             onChangeText={setBandName}
           />
 
-          <CustomButton text="Confirm" onPress={handleCreateBand} />
+          {loading ? (
+            <ActivityIndicator size="small" />
+          ) : (
+            <CustomButton text="Confirm" onPress={handleCreateBand} />
+          )}
 
           <Button
             title="Cancel"

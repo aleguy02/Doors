@@ -41,7 +41,7 @@ const AuthScreen = () => {
         />
 
         {isLoading ? (
-          <ActivityIndicator size="large"></ActivityIndicator>
+          <ActivityIndicator size="large" />
         ) : (
           <>
             <Button title="Log In" onPress={() => loginUser(email, password)} />
