@@ -13,7 +13,7 @@ export async function createNewBandService(
   fireStoreDB: any,
   userId: string,
   bandName: string
-): Promise<void> {
+): Promise<string> {
   if (!userId) {
     throw new Error('User is invalid');
   }
@@ -55,4 +55,6 @@ export async function createNewBandService(
     band_names: arrayUnion(...userPayload.band_names),
     band_ids: arrayUnion(...userPayload.band_ids),
   });
+
+  return bandDoc.id;
 }
