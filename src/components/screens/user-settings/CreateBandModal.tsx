@@ -20,7 +20,7 @@ const CreateBandModal: React.FC<{
 }> = ({ modalVisible, setModalVisible }) => {
   const { fireStoreDB, authState } = useAuth();
   const [bandName, setBandName] = useState<string>('');
-  const [view, setView] = useState<'default' | 'show code'>('show code');
+  const [view, setView] = useState<'default' | 'show code'>('default');
   const [viewID, setViewID] = useState<string>('');
   const [clipboardText, setClipboardText] =
     useState<string>('Copy to clipboard');
@@ -35,7 +35,7 @@ const CreateBandModal: React.FC<{
         throw new Error('User is not authenticated');
       }
       setViewID(
-        await createNewBandService(fireStoreDB, authState.user.uid, bandName)
+        await createNewBandService(fireStoreDB, authState.user, bandName)
       );
       setView('show code');
     } catch (error: any) {

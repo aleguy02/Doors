@@ -1,20 +1,14 @@
-import {
-  getDoc,
-  addDoc,
-  collection,
-  doc,
-  updateDoc,
-  arrayUnion,
-} from 'firebase/firestore';
-import { FirestoreUserType } from '../types/FirestoreUserType';
+import { getDoc, addDoc, collection, doc, updateDoc } from 'firebase/firestore';
+import { User } from 'firebase/auth';
+
 import { FirestoreBandType } from '../types/FirestoreBandType';
 
 export async function createNewBandService(
   fireStoreDB: any,
-  userId: string,
+  user: User,
   bandName: string
 ): Promise<string> {
-  if (!userId) {
+  if (!user || !user.email) {
     throw new Error('User is invalid');
   }
   if (!bandName) {
@@ -22,15 +16,15 @@ export async function createNewBandService(
   }
 
   // Get user document
-  const docRef = doc(fireStoreDB, 'users', userId);
+  const docRef = doc(fireStoreDB, 'users', user.uid);
   const docSnap = await getDoc(docRef);
   if (!docSnap.exists()) {
     throw new Error('User doc not found');
   }
 
   // Check if name is taken
-  const bandNames: string[] = docSnap.data().band_names;
-  if (bandNames.includes(bandName)) {
+  const bands: Record<string, string> = docSnap.data().bands;
+  if (bandName in bands) {
     throw new Error(
       'You already have a band by that name. Please enter a different name'
     );
@@ -39,21 +33,17 @@ export async function createNewBandService(
   // Create new band document
   const bandPayload: FirestoreBandType = {
     name: bandName,
-    members: [userId],
+    members: [user.email],
   };
   const bandDoc = await addDoc(collection(fireStoreDB, 'bands'), {
     name: bandPayload.name,
     members: bandPayload.members,
   });
 
-  // Update user document
-  const userPayload: FirestoreUserType = {
-    band_names: [bandName],
-    band_ids: [bandDoc.id],
-  };
   await updateDoc(docRef, {
-    band_names: arrayUnion(...userPayload.band_names),
-    band_ids: arrayUnion(...userPayload.band_ids),
+    // band_names: arrayUnion(...userPayload.band_names),
+    // band_ids: arrayUnion(...userPayload.band_ids),
+    [`bands.${bandName}`]: bandDoc.id,
   });
 
   return bandDoc.id;

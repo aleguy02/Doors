@@ -32,8 +32,8 @@ export async function createNewUserService(
   );
   console.log('createUserWithEmailAndPassword_response', response);
   const user_data: FirestoreUserType = {
-    band_ids: [],
-    band_names: [],
+    email: email,
+    bands: {},
   };
   await setDoc(doc(fireStoreDB, 'users', response.user.uid), user_data);
   return response.user;
