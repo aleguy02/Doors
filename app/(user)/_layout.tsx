@@ -13,6 +13,14 @@ export default function Layout() {
         },
         headerTitle: 'User Settings',
       }}
-    />
+    >
+      <Stack.Screen
+        name="managebands"
+        options={{
+          headerTitle: 'My Bands',
+          headerBackButtonDisplayMode: 'minimal',
+        }}
+      />
+    </Stack>
   );
 }
