@@ -10,9 +10,9 @@ import {
 } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 
-import { createNewBandService } from '../../../services/bandService';
-import CustomButton from '../../buttons/CustomButton';
-import { useAuth } from '../../../contexts/AuthContext';
+import { createNewBandService } from '../../services/bandService';
+import CustomButton from '../buttons/CustomButton';
+import { useAuth } from '../../contexts/AuthContext';
 
 const CreateBandModal: React.FC<{
   modalVisible: boolean;

@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { View, Button, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 
-import { useAuth } from '../../../contexts/AuthContext';
-import CustomButton from '../../buttons/CustomButton';
-import CreateBandModal from './CreateBandModal';
+import { useAuth } from '../../contexts/AuthContext';
+import CustomButton from '../buttons/CustomButton';
+import CreateBandModal from '../modals/CreateBandModal';
 
 const UserSettingsScreen = () => {
   const router = useRouter();
