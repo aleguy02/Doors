@@ -64,8 +64,8 @@ describe('createNewUserService', () => {
       mock_user.uid
     );
     expect(setDoc).toHaveBeenCalledWith(mockument, {
-      band_ids: [],
-      band_names: [],
+      email: 'test@gmail.com',
+      bands: {},
     });
     expect(service_response).toBe(mock_user);
   });
