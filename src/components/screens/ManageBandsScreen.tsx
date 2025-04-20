@@ -3,15 +3,26 @@ import { ScrollView, View } from 'react-native';
 
 import CustomButton from '../buttons/CustomButton';
 
-const dummy_data = { gnomefest: 'band123', 'Idle Hands': 'another123' };
+interface ManageBandsScreenType {
+  onButtonPress: (bandName: string) => void;
+  bandsData: Record<string, string>;
+}
 
-const button_map = Object.entries(dummy_data).map(([name, id]) => {
-  return (
-    <CustomButton key={name} variant={'long'} text={name} onPress={() => {}} />
-  );
-});
+const ManageBandsScreen = ({
+  onButtonPress,
+  bandsData,
+}: ManageBandsScreenType) => {
+  const button_map = Object.entries(bandsData).map(([name, id]) => {
+    return (
+      <CustomButton
+        key={name}
+        variant={'long'}
+        text={name}
+        onPress={() => onButtonPress(name)}
+      />
+    );
+  });
 
-export default function ManageBandsScreen() {
   return (
     <ScrollView>
       <View className="flex-1 gap-8 justify-start items-center py-10">
@@ -19,4 +30,6 @@ export default function ManageBandsScreen() {
       </View>
     </ScrollView>
   );
-}
+};
+
+export default ManageBandsScreen;

@@ -12,13 +12,17 @@ export default function Layout() {
           fontWeight: 'bold',
         },
         headerTitle: 'User Settings',
+        /* Disable back button visibility
+         * It's my opinion that having a visible back button will cause confusion if ManageBands is a single-page.
+         * Also, it clashes with the rest of the apps established UI.
+         */
+        headerBackVisible: false,
       }}
     >
       <Stack.Screen
-        name="managebands"
+        name="managebands/index"
         options={{
           headerTitle: 'My Bands',
-          headerBackButtonDisplayMode: 'minimal',
         }}
       />
     </Stack>
