@@ -10,7 +10,7 @@ interface BandInfoScreenType {
   info: FirestoreBandType;
 }
 
-// const dummy_band_member_data: Record<string, FirestoreBandType> = {
+// const example_data: Record<string, FirestoreBandType> = {
 //   band123: {
 //     owner: 'darthaleguy@gmail.com',
 //     members: ['fake@gmail.com'],
