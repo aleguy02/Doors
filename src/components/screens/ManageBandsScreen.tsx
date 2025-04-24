@@ -41,6 +41,7 @@ const ManageBandsScreen = () => {
           setBandInfo(res);
         });
       });
+
     setLoading(false);
   }, []);
 

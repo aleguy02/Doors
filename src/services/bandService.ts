@@ -1,4 +1,11 @@
-import { getDoc, addDoc, collection, doc, updateDoc } from 'firebase/firestore';
+import {
+  getDoc,
+  addDoc,
+  collection,
+  doc,
+  updateDoc,
+  arrayUnion,
+} from 'firebase/firestore';
 import { User } from 'firebase/auth';
 
 import { FirestoreBandType } from '../types/FirestoreBandType';
@@ -49,6 +56,42 @@ export async function createNewBandService(
   return bandDoc.id;
 }
 
+export async function linkBandService(
+  fireStoreDB: any,
+  user: User,
+  id: string
+): Promise<void> {
+  if (!user || !user.email) {
+    throw new Error('User is invalid');
+  }
+
+  // Add user to band document. We don't have to check for duplication because firestore::arrayUnion handles that already (https://firebase.google.com/docs/firestore/manage-data/add-data)
+  const bandDocRef = doc(fireStoreDB, 'bands', id);
+  const bandDocSnap = await getDoc(bandDocRef);
+  if (!bandDocSnap.exists()) {
+    throw new Error('Band not found');
+  }
+  // save bandName for later
+  const bandName = bandDocSnap.get('name');
+
+  // Get user document
+  const userDocRef = doc(fireStoreDB, 'users', user.uid);
+  const userDocSnap = await getDoc(userDocRef);
+  if (!userDocSnap.exists()) {
+    throw new Error('User doc not found');
+  }
+
+  // Check if name is taken (this also checks if I am the owner of a band)
+  const bands: Record<string, string> = userDocSnap.data().bands;
+  if (bandName in bands) {
+    throw new Error(`You already have a band by that name (${bandName}).`);
+  }
+
+  // Do all writes at the end
+  await updateDoc(bandDocRef, { members: arrayUnion(user.email) });
+  await updateDoc(userDocRef, { [`bands.${bandName}`]: id });
+}
+
 export async function getBandIDs(
   fireStoreDB: any,
   user: User
@@ -77,7 +120,7 @@ export async function getBandInfo(
     const docRef = doc(fireStoreDB, 'bands', id);
     const docSnap = await getDoc(docRef);
     if (!docSnap.exists()) {
-      throw new Error('User doc not found');
+      throw new Error('Band doc not found');
     }
     return {
       name: docSnap.get('name'),
