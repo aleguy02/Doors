@@ -103,8 +103,7 @@ const CreateBandModal: React.FC<{
         <View className="flex-1 justify-center items-center">
           <View className="w-3/4 p-10 bg-white rounded-lg shadow-lg items-center">
             <Text className="text-xl font-bold mb-4 text-center text-red-600">
-              IMPORTANT: SAVE THIS CODE AND KEEP IT A SECRET. IT WILL NOT BE
-              SHOWN AGAIN
+              KEEP THIS CODE SECRET.
             </Text>
             <View className="bg-gray-100 rounded-lg p-3 mb-4">
               <Text className="text-lg font-mono text-center text-black">
@@ -113,7 +112,7 @@ const CreateBandModal: React.FC<{
             </View>
             <Text className="text-base mb-4 text-center text-gray-700">
               Your band was created successfully! After closing this modal, tap
-              the "Manage Bands" button to view it. This code allows your
+              the "Manage Bands" button to view it again. This code allows your
               bandmates to link their Doors account to your band. Do not share
               it with anyone outside of your band.
             </Text>

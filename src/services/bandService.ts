@@ -33,10 +33,12 @@ export async function createNewBandService(
   // Create new band document
   const bandPayload: FirestoreBandType = {
     name: bandName,
-    members: [user.email],
+    owner: user.email,
+    members: [],
   };
   const bandDoc = await addDoc(collection(fireStoreDB, 'bands'), {
     name: bandPayload.name,
+    owner: bandPayload.owner,
     members: bandPayload.members,
   });
 

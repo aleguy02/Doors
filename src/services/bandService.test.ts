@@ -43,7 +43,8 @@ describe('createNewBandService', () => {
     expect(getDoc).toHaveBeenCalledWith('mockDocRef');
     expect(addDoc).toHaveBeenCalledWith(expect.anything(), {
       name: mockBandName,
-      members: [mockUser.email],
+      owner: mockUser.email,
+      members: [],
     });
     expect(updateDoc).toHaveBeenCalledWith('mockDocRef', {
       [`bands.${mockBandName}`]: mockBandDoc.id,
