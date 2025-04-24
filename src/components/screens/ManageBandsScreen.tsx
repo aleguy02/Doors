@@ -18,7 +18,7 @@ const ManageBandsScreen = ({
         key={name}
         variant={'long'}
         text={name}
-        onPress={() => onButtonPress(name)}
+        onPress={() => onButtonPress(id)}
       />
     );
   });
