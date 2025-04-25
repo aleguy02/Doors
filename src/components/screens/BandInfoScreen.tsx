@@ -1,5 +1,6 @@
 import React from 'react';
 import { ScrollView, View, Text, Pressable, Button, Alert } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 
 import CustomButton from '../buttons/CustomButton';
 import { FirestoreBandType } from '../../types/FirestoreBandType';
@@ -35,7 +36,7 @@ const BandInfoScreen = ({ onButtonPress, code, info }: BandInfoScreenType) => {
             console.log(`removed ${email}`);
           }}
         >
-          <Text>TRASH</Text>
+          <Text>REMOVE</Text>
         </Pressable>
       </View>
     );
@@ -61,10 +62,11 @@ const BandInfoScreen = ({ onButtonPress, code, info }: BandInfoScreenType) => {
           {members_list}
         </View>
         <CustomButton
-          text="View Code"
+          text="Copy Code"
           variant="long"
           onPress={() => {
-            Alert.alert(code);
+            Clipboard.setStringAsync(code);
+            Alert.alert(code, 'Copied to clipboard');
           }}
         />
         <Button

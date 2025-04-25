@@ -64,6 +64,9 @@ export async function linkBandService(
   if (!user || !user.email) {
     throw new Error('User is invalid');
   }
+  if (!id) {
+    throw new Error('Band ID required');
+  }
 
   // Add user to band document. We don't have to check for duplication because firestore::arrayUnion handles that already (https://firebase.google.com/docs/firestore/manage-data/add-data)
   const bandDocRef = doc(fireStoreDB, 'bands', id);

@@ -11,7 +11,7 @@ export default function Layout() {
         headerTitleStyle: {
           fontWeight: 'bold',
         },
-        headerTitle: 'Auth',
+        headerTitle: 'Doors',
       }}
     />
   );
