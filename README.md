@@ -6,7 +6,7 @@
 <h1 align="center" style="font-weight: bold;">Doors 🚪</h1>
 
 <p align="center">
-<a href="#technologies">Technologies</a>
+<a href="#technologies">Tech Stack</a>
 <a href="#started">Getting Started</a>
 <a href="#design">Architecture/Design</a>
 
@@ -18,12 +18,18 @@
 <a href="https://github.com/aleguy02/Doors">View Repo</a>
 </p>
 
-<h2 id="technologies">💻 Technologies</h2>
+<h2 id="technologies">Tech Stack</h2>
 
-- React Native
-- Nativewind
-- Firebase/Firebase
-- Expo Go (development)
+[![My Skills](https://skillicons.dev/icons?i=npm,react,ts,tailwind,firebase,babel,jest)](https://skillicons.dev) ... and more!
+
+- [NPM](https://www.npmjs.com/) for package management
+- [TypeScript](https://www.typescriptlang.org/) because we love typechecking
+- [React Native](https://reactnative.dev/) to build for all platforms
+- [Nativewind](https://www.nativewind.dev/) because scaling CSS is tedious
+- [Firebase](https://firebase.google.com/) for simpler authentication
+- [Firestore](https://firebase.google.com/docs/firestore) for flexibility with data and easy scaling
+- [Expo Go](https://expo.dev/) for an integrated environment and intuitive routing
+- [Jest](https://jestjs.io/) to create a comprehensive testing suite
 
 <h2 id="started">🚀 Getting started</h2>
 
