@@ -7,6 +7,7 @@
 
 <p align="center">
 <a href="#technologies">Tech Stack</a>
+<a href="#understanding">Understanding the Code Base</a>
 <a href="#started">Getting Started</a>
 <a href="#design">Architecture/Design</a>
 
@@ -30,6 +31,30 @@
 - [Firestore](https://firebase.google.com/docs/firestore) for flexibility with data and easy scaling
 - [Expo Go](https://expo.dev/) for an integrated environment and intuitive routing
 - [Jest](https://jestjs.io/) to create a comprehensive testing suite
+
+<h2 id="understanding">Understanding the Code Base</h2>
+
+## Project Directories
+```
+doors/
+├── app                      # special routes directory/
+│   ├── (auth)                 # authentication route
+│   ├── (tabs)                 # home screens route
+│   └── (user)                 # user settings route/
+│       └── managebands          # managing bands route
+├── assets                   # static assets/
+│   └── icons                  # app icons
+└── src                      # main app logic/
+    ├── components             # custom react native components/
+    │   ├── buttons              # custom buttons
+    │   ├── modals               # custom modals
+    │   └── screens              # all the different screens
+    ├── configs                # app configurations
+    ├── contexts               # custom react contexts
+    ├── services               # business logic
+    └── types                  # custom TypeScript types
+```
+The diagram above explains the file structure of the project. The get a better understanding of the codebase you can *read* the code. There are helpful comments and files peppered throughout the project.
 
 <h2 id="started">🚀 Getting started</h2>
 
