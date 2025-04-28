@@ -58,7 +58,7 @@ const LinkBandModal: React.FC<{
             <TextInput
               className="border border-gray-300 rounded p-2 mb-4 w-full"
               maxLength={50}
-              placeholder="Band name"
+              placeholder="Band ID"
               value={bandID}
               onChangeText={setBandID}
             />
@@ -73,6 +73,7 @@ const LinkBandModal: React.FC<{
               title="Cancel"
               onPress={() => {
                 setModalVisible(!modalVisible);
+                setBandID('');
               }}
             />
           </View>

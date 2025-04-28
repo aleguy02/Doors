@@ -88,9 +88,11 @@ export async function linkBandService(
   }
 
   // Check if name is taken (this also checks if I am the owner of a band)
-  const bands: Record<string, string> = userDocSnap.data().bands;
-  if (bandName in bands) {
+  if (bandName in userDocSnap.get('bands')) {
     throw new Error(`You already have a band by that name (${bandName}).`);
+  }
+  if (bandDocSnap.get('members').length >= 6) {
+    throw new Error('This band is full');
   }
 
   // Do all writes at the end
