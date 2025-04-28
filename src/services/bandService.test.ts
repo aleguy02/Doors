@@ -1,5 +1,5 @@
 import { User } from 'firebase/auth';
-import { createNewBandService } from './bandService';
+import { createNewBandService, getBandIDs, getBandInfo } from './bandService';
 import { getDoc, addDoc, collection, doc, updateDoc } from 'firebase/firestore';
 
 /* ==== SETUP ==== */
@@ -26,7 +26,6 @@ describe('createNewBandService', () => {
   test('Create new band and store band data in Firestore', async () => {
     const mockUserDoc = {
       exists: jest.fn().mockReturnValue(true),
-      // data: jest.fn().mockReturnValue({ band_names: [] }),
       data: jest.fn().mockReturnValue({ bands: {} }),
     };
     const mockBandsCollection = {};
@@ -43,7 +42,8 @@ describe('createNewBandService', () => {
     expect(getDoc).toHaveBeenCalledWith('mockDocRef');
     expect(addDoc).toHaveBeenCalledWith(expect.anything(), {
       name: mockBandName,
-      members: [mockUser.email],
+      owner: mockUser.email,
+      members: [],
     });
     expect(updateDoc).toHaveBeenCalledWith('mockDocRef', {
       [`bands.${mockBandName}`]: mockBandDoc.id,
@@ -94,5 +94,124 @@ describe('createNewBandService', () => {
     );
     expect(addDoc).not.toHaveBeenCalled();
     expect(updateDoc).not.toHaveBeenCalled();
+  });
+});
+
+describe('Manage Bands suite', () => {
+  describe('getBandIDs', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    test('Get user band IDs', async () => {
+      const mockUserDoc = {
+        exists: jest.fn().mockReturnValue(true),
+        data: jest.fn().mockReturnValue({
+          bands: { 'The Gnomies': 'id123', 'Idle Hands': 'another123' },
+          email: mockUser.email,
+        }),
+      };
+      (doc as jest.Mock).mockReturnValue('mockDocRef');
+      (getDoc as jest.Mock).mockResolvedValue(mockUserDoc);
+
+      const service_response = await getBandIDs(mockFirestoreDB, mockUser);
+
+      expect(doc).toHaveBeenCalledWith(mockFirestoreDB, 'users', mockUser.uid);
+      expect(getDoc).toHaveBeenCalledWith('mockDocRef');
+      expect(service_response).toStrictEqual({
+        'The Gnomies': 'id123',
+        'Idle Hands': 'another123',
+      });
+    });
+
+    test('User is not a part of any bands', async () => {
+      const mockUserDoc = {
+        exists: jest.fn().mockReturnValue(true),
+        data: jest.fn().mockReturnValue({
+          bands: {},
+          email: mockUser.email,
+        }),
+      };
+      (doc as jest.Mock).mockReturnValue('mockDocRef');
+      (getDoc as jest.Mock).mockResolvedValue(mockUserDoc);
+
+      const service_response = await getBandIDs(mockFirestoreDB, mockUser);
+
+      expect(doc).toHaveBeenCalledWith(mockFirestoreDB, 'users', mockUser.uid);
+      expect(getDoc).toHaveBeenCalledWith('mockDocRef');
+      expect(service_response).toStrictEqual({});
+    });
+
+    test('Throws error if userId is invalid', async () => {
+      const mockInvalidUser = {} as User;
+      await expect(
+        getBandIDs(mockFirestoreDB, mockInvalidUser)
+      ).rejects.toThrow('User is invalid');
+    });
+
+    test('Throws error if user document does not exist', async () => {
+      const mockUserDoc = {
+        exists: jest.fn().mockReturnValue(false),
+      };
+      (doc as jest.Mock).mockReturnValue('mockDocRef');
+      (getDoc as jest.Mock).mockResolvedValue(mockUserDoc);
+      await expect(getBandIDs(mockFirestoreDB, mockUser)).rejects.toThrow(
+        'User doc not found'
+      );
+    });
+  });
+
+  describe('getBandInfo', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    test('Populate band info object', async () => {
+      const mockBandDoc1 = {
+        exists: jest.fn().mockReturnValue(true),
+        get: jest.fn().mockImplementation((field: string) => {
+          const data: Record<string, any> = {
+            name: 'The Gnomies',
+            members: ['foo@gmail.com', 'bar@gmail.com'],
+            owner: mockUser.email,
+          };
+          return data[field];
+        }),
+      };
+      const mockBandDoc2 = {
+        exists: jest.fn().mockReturnValue(true),
+        get: jest.fn().mockImplementation((field: string) => {
+          const data: Record<string, any> = {
+            name: 'Idle Hands',
+            members: [],
+            owner: mockUser.email,
+          };
+          return data[field];
+        }),
+      };
+
+      (getDoc as jest.Mock)
+        .mockResolvedValueOnce(mockBandDoc1)
+        .mockReturnValueOnce(mockBandDoc2);
+
+      const expected = {
+        band123: {
+          owner: mockUser.email,
+          members: ['foo@gmail.com', 'bar@gmail.com'],
+          name: 'The Gnomies',
+        },
+        another123: {
+          owner: mockUser.email,
+          members: [],
+          name: 'Idle Hands',
+        },
+      };
+      const service_response = await getBandInfo(mockFirestoreDB, [
+        'band123',
+        'another123',
+      ]);
+
+      expect(service_response).toStrictEqual(expected);
+    });
   });
 });

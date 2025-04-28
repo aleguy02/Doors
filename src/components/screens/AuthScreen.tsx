@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import {
   TextInput,
+  Text,
   ActivityIndicator,
   Button,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  View,
 } from 'react-native';
 
 import { useAuth } from '../../contexts/AuthContext';
@@ -21,24 +23,39 @@ const AuthScreen = () => {
   return (
     <ScrollView>
       <KeyboardAvoidingView
+        id="main-content"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1 gap-8 justify-start items-center py-10"
+        className="flex px-6 py-10 gap-6"
       >
-        <TextInput
-          className="w-4/5 p-4 border border-gray-300 rounded-md"
-          placeholder="Email"
-          autoCapitalize="none"
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-        />
-        <TextInput
-          className="w-4/5 p-4 border border-gray-300 rounded-md"
-          placeholder="Password"
-          autoCapitalize="none"
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-          secureTextEntry={true}
-        />
+        <Text className="font-semibold text-3xl">Welcome 🤘</Text>
+        <View
+          id="form"
+          className="flex flex-col justify-center items-end gap-4 self-stretch"
+        >
+          <View className="flex flex-col items-start gap-2 self-stretch">
+            <Text>Email</Text>
+            <TextInput
+              className="bg-gray-200 p-4 border border-gray-300 rounded-md self-stretch"
+              placeholder="example@email.com"
+              placeholderTextColor="#8897AD"
+              autoCapitalize="none"
+              onChangeText={(text) => setEmail(text)}
+              value={email}
+            />
+          </View>
+          <View className="flex flex-col items-start gap-2 self-stretch">
+            <Text className="mb-2 text-gray-700">Password</Text>
+            <TextInput
+              className="bg-gray-200 p-4 border border-gray-300 rounded-md self-stretch"
+              placeholder="CapitalSomewhere123"
+              placeholderTextColor="#8897AD"
+              autoCapitalize="none"
+              onChangeText={(text) => setPassword(text)}
+              value={password}
+              secureTextEntry={true}
+            />
+          </View>
+        </View>
 
         {isLoading ? (
           <ActivityIndicator size="large" />
