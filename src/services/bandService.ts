@@ -21,6 +21,9 @@ export async function createNewBandService(
   if (!bandName) {
     throw new Error('Band name required');
   }
+  if (bandName.length > 25) {
+    throw new Error('Band name must be 25 characters or less');
+  }
 
   // Get user document
   const docRef = doc(fireStoreDB, 'users', user.uid);

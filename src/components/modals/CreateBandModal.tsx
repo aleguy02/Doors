@@ -64,7 +64,7 @@ const CreateBandModal: React.FC<{
             </Text>
             <TextInput
               className="border border-gray-300 rounded p-2 mb-4 w-full"
-              maxLength={50}
+              maxLength={25}
               placeholder="Band name"
               value={bandName}
               onChangeText={setBandName}
