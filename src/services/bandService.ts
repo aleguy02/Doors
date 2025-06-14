@@ -5,6 +5,10 @@ import {
   doc,
   updateDoc,
   arrayUnion,
+  deleteDoc,
+  getDocs,
+  query,
+  where,
 } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 
@@ -136,6 +140,56 @@ export async function getBandInfo(
       members: docSnap.get('members'),
     } as FirestoreBandType;
   });
+}
+
+// Delete band service
+export async function deleteBandService(
+  fireStoreDB: any,
+  user: User,
+  code: string
+): Promise<void> {
+  if (!user || !user.email) {
+    throw new Error('User is invalid');
+  }
+  if (!code) {
+    throw new Error('Band ID required');
+  }
+
+  // Get the band document
+  const bandDocRef = doc(fireStoreDB, 'bands', code);
+  const bandDocSnap = await getDoc(bandDocRef);
+  if (!bandDocSnap.exists()) {
+    throw new Error('Band not found');
+  }
+
+  // Only allow the owner to delete the band
+  const bandOwner = bandDocSnap.get('owner');
+  if (bandOwner !== user.email) {
+    throw new Error('Only the band owner can delete the band');
+  }
+
+  const bandName = bandDocSnap.get('name');
+  const members: string[] = bandDocSnap.get('members') || [];
+  members.push(bandDocSnap.get('owner'));
+
+  // Remove band from each member's user document
+  for (const memberEmail of members) {
+    // Query user by email
+    const usersCollection = collection(fireStoreDB, 'users');
+    const q = query(usersCollection, where('email', '==', memberEmail));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (userDocSnap) => {
+      const userBands = userDocSnap.data().bands || {};
+      if (userBands && bandName in userBands && userBands[bandName] === code) {
+        const updatedBands = { ...userBands };
+        delete updatedBands[bandName];
+        await updateDoc(userDocSnap.ref, { bands: updatedBands });
+      }
+    });
+  }
+
+  // Delete the band document
+  await deleteDoc(bandDocRef);
 }
 
 // helper function

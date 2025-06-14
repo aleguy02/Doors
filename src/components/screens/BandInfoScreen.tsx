@@ -1,9 +1,21 @@
 import React from 'react';
-import { ScrollView, View, Text, Pressable, Button, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  Button,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import * as Clipboard from 'expo-clipboard';
+import { useState } from 'react';
+import Toast from 'react-native-toast-message';
+import { useRouter } from 'expo-router';
 
 import CustomButton from '../buttons/CustomButton';
 import { FirestoreBandType } from '../../types/FirestoreBandType';
+import { deleteBandService } from '../../services/bandService';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface BandInfoScreenType {
   onButtonPress: (bandName: string) => void;
@@ -23,7 +35,51 @@ interface BandInfoScreenType {
 //     name: 'Idle Hands',
 //   },
 // };
+
+const errorToast = (text1: string, text2: string) => {
+  Toast.show({
+    type: 'error',
+    text1: text1,
+    text2: text2,
+  });
+};
+
 const BandInfoScreen = ({ onButtonPress, code, info }: BandInfoScreenType) => {
+  const { fireStoreDB, authState } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleDelete = async () => {
+    setLoading(true);
+    try {
+      if (!authState.user) throw new Error('User is not authenticated');
+      const confirmed = await new Promise<boolean>((resolve) => {
+        Alert.alert(
+          'Delete Band',
+          'Are you sure you want to delete this band? This action cannot be undone.',
+          [
+            { text: 'Cancel', style: 'cancel', onPress: () => resolve(false) },
+            {
+              text: 'Delete',
+              style: 'destructive',
+              onPress: () => resolve(true),
+            },
+          ],
+          { cancelable: false }
+        );
+      });
+      if (!confirmed) {
+        setLoading(false);
+        return;
+      }
+      await deleteBandService(fireStoreDB, authState.user, code);
+      router.back();
+    } catch (error) {
+      errorToast('Something went wrong', 'Please wait and try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
   const members_list = info.members.map((email) => {
     return (
       <View
@@ -69,11 +125,11 @@ const BandInfoScreen = ({ onButtonPress, code, info }: BandInfoScreenType) => {
             Alert.alert(code, 'Copied to clipboard');
           }}
         />
-        <Button
-          title="Delete Band"
-          color="#ED0000"
-          onPress={() => Alert.alert('Delete band')}
-        />
+        {loading ? (
+          <ActivityIndicator size="large" />
+        ) : (
+          <Button title="Delete Band" color="#ED0000" onPress={handleDelete} />
+        )}
       </View>
 
       <CustomButton
