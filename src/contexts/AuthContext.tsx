@@ -7,6 +7,8 @@ import {
 } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { useRouter } from 'expo-router';
+import Toast from 'react-native-toast-message';
+import { FirebaseError } from 'firebase/app';
 
 import { firebaseAuth, fireStoreDB } from '../configs/firebaseConfig';
 import { AuthContextType } from '../types/AuthContextType';
@@ -39,7 +41,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }>({ user: null, sessionActive: false });
   const [loading, setLoading] = useState(true);
 
-  // const auth = firebaseAuth;
+  const errorToast = (text1: string, text2: string) => {
+    Toast.show({
+      type: 'error',
+      text1: text1,
+      text2: text2,
+    });
+  };
 
   // occurs on component mount
   useEffect(() => {
@@ -79,11 +87,23 @@ export function AuthProvider({ children }: PropsWithChildren) {
       setAuthState({ user: user, sessionActive: true });
     } catch (error: any) {
       console.log(error);
-      alert(
-        'Error signing in user: ' +
-          error.message +
-          '\n\nPlease send a description and screenshot of this error to a.villate@ufl.edu'
-      );
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case 'auth/invalid-email':
+            errorToast('Log in failed', 'Email is invalid');
+            break;
+          case 'auth/missing-password':
+            errorToast('Log in failed', 'Password is missing');
+            break;
+          case 'auth/invalid-credential':
+            errorToast('Log in failed', 'Credentials are invalid');
+            break;
+          default:
+            errorToast('Log in failed', error.message);
+        }
+      } else {
+        errorToast('Unknown error occured', error.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -95,11 +115,30 @@ export function AuthProvider({ children }: PropsWithChildren) {
       setAuthState({ user: user, sessionActive: true });
     } catch (error: any) {
       console.log(error);
-      alert(
-        'Error creating new user: ' +
-          error.message +
-          '\n\nPlease send a description and screenshot of this error to a.villate@ufl.edu'
-      );
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case 'auth/invalid-email':
+            errorToast('Sign up failed', 'Email is invalid');
+            break;
+          case 'auth/missing-password':
+            errorToast('Sign up failed', 'Password is missing');
+            break;
+          case 'auth/password-does-not-meet-requirements':
+            // TODO: this doesn't wrap so the error message is cut off
+            errorToast(
+              'Sign up failed',
+              'Password must contain at least 6 characters, an upper case character, and a number'
+            );
+            break;
+          case 'auth/email-already-in-use':
+            errorToast('Sign up failed', 'Email is in use');
+            break;
+          default:
+            errorToast('Sign up failed', error.message);
+        }
+      } else {
+        errorToast('Unknown error occured', error.message);
+      }
     } finally {
       setLoading(false);
     }
