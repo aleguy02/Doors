@@ -51,6 +51,7 @@ describe('createNewBandService', () => {
   });
 
   test('Throws error if userId is invalid', async () => {
+    expect.assertions(1);
     const mockInvalidUser = {} as User;
     await expect(
       createNewBandService(mockFirestoreDB, mockInvalidUser, mockBandName)
@@ -58,12 +59,14 @@ describe('createNewBandService', () => {
   });
 
   test('Throws error if bandName is missing', async () => {
+    expect.assertions(1);
     await expect(
       createNewBandService(mockFirestoreDB, mockUser, '')
     ).rejects.toThrow('Band name required');
   });
 
   test('Throws error if user document does not exist', async () => {
+    expect.assertions(1);
     const mockUserDoc = {
       exists: jest.fn().mockReturnValue(false),
     };
@@ -77,6 +80,7 @@ describe('createNewBandService', () => {
   });
 
   test('Throws error if band name is already taken', async () => {
+    expect.assertions(3);
     const mockUserDoc = {
       exists: jest.fn().mockReturnValue(true),
       data: jest
@@ -143,6 +147,7 @@ describe('Manage Bands suite', () => {
     });
 
     test('Throws error if userId is invalid', async () => {
+      expect.assertions(1);
       const mockInvalidUser = {} as User;
       await expect(
         getBandIDs(mockFirestoreDB, mockInvalidUser)
@@ -150,6 +155,7 @@ describe('Manage Bands suite', () => {
     });
 
     test('Throws error if user document does not exist', async () => {
+      expect.assertions(1);
       const mockUserDoc = {
         exists: jest.fn().mockReturnValue(false),
       };

@@ -41,11 +41,11 @@ const mockument = {};
 
 /* ==== TESTS ==== */
 describe('createNewUserService', () => {
-  test('Create new user and store user data in Firestore', async () => {
+  test('should create a new user and store user data in Firestore', async () => {
     (createUserWithEmailAndPassword as jest.Mock).mockResolvedValue({
       user: mock_user,
     });
-    (doc as jest.Mock).mockReturnValue(mockument); // I'm so funny
+    (doc as jest.Mock).mockReturnValue(mockument);
     (setDoc as jest.Mock).mockResolvedValue(null);
 
     const service_response = await createNewUserService(
@@ -54,23 +54,27 @@ describe('createNewUserService', () => {
     );
 
     expect(createUserWithEmailAndPassword).toHaveBeenCalledWith(
-      expect.anything(), // firebase Auth
+      expect.anything(),
       'test@gmail.com',
       'password1'
     );
-    expect(doc).toHaveBeenCalledWith(
-      expect.anything(), // firebase Auth
-      'users',
-      mock_user.uid
-    );
+    expect(doc).toHaveBeenCalledWith(expect.anything(), 'users', mock_user.uid);
     expect(setDoc).toHaveBeenCalledWith(mockument, {
       email: 'test@gmail.com',
       bands: {},
     });
     expect(service_response).toBe(mock_user);
+    // Ensure correct call order
+    expect(
+      (createUserWithEmailAndPassword as jest.Mock).mock.invocationCallOrder[0]
+    ).toBeLessThan((doc as jest.Mock).mock.invocationCallOrder[0]);
+    expect((doc as jest.Mock).mock.invocationCallOrder[0]).toBeLessThan(
+      (setDoc as jest.Mock).mock.invocationCallOrder[0]
+    );
   });
 
-  test('Throws error if email or password is invalid', async () => {
+  test('should throw error if email or password is invalid', async () => {
+    expect.assertions(3);
     (createUserWithEmailAndPassword as jest.Mock).mockRejectedValue(
       new Error('Invalid email')
     );
@@ -84,7 +88,7 @@ describe('createNewUserService', () => {
 });
 
 describe('loginExistingUserService', () => {
-  test('Login user', async () => {
+  test('should login user with valid credentials', async () => {
     (signInWithEmailAndPassword as jest.Mock).mockResolvedValue({
       user: mock_user,
     });
@@ -95,14 +99,15 @@ describe('loginExistingUserService', () => {
     );
 
     expect(signInWithEmailAndPassword).toHaveBeenCalledWith(
-      expect.anything(), // firebase Auth
+      expect.anything(),
       'test@gmail.com',
       'password1'
     );
     expect(service_response).toBe(mock_user);
   });
 
-  test('Throws error if email or password is invalid', async () => {
+  test('should throw error if email or password is invalid', async () => {
+    expect.assertions(1);
     (signInWithEmailAndPassword as jest.Mock).mockRejectedValue(
       new Error('Invalid email')
     );
