@@ -31,6 +31,12 @@ export default function TabLayout() {
           title: 'Payment',
         }}
       />
+      <Tabs.Screen
+        name="newshow"
+        options={{
+          title: 'Shows',
+        }}
+      />
     </Tabs>
   );
 }

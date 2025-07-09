@@ -49,11 +49,13 @@ export async function createNewBandService(
     name: bandName,
     owner: user.email,
     members: [],
+    shows: [],
   };
   const bandDoc = await addDoc(collection(fireStoreDB, 'bands'), {
     name: bandPayload.name,
     owner: bandPayload.owner,
     members: bandPayload.members,
+    shows: bandPayload.shows,
   });
 
   await updateDoc(docRef, {
@@ -138,6 +140,7 @@ export async function getBandInfo(
       name: docSnap.get('name'),
       owner: docSnap.get('owner'),
       members: docSnap.get('members'),
+      shows: docSnap.get('shows'),
     } as FirestoreBandType;
   });
 }
