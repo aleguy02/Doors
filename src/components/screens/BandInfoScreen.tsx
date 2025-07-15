@@ -8,13 +8,15 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import { useRouter } from 'expo-router';
 
 import CustomButton from '../buttons/CustomButton';
 import { FirestoreBandType } from '../../types/FirestoreBandType';
+import { FirestoreShowType } from '../../types/FirestoreShowType';
 import { deleteBandService } from '../../services/bandService';
+import { getBandShowsService } from '../../services/showService';
 import { useAuth } from '../../contexts/AuthContext';
 
 interface BandInfoScreenType {
@@ -47,7 +49,26 @@ const errorToast = (text1: string, text2: string) => {
 const BandInfoScreen = ({ onButtonPress, code, info }: BandInfoScreenType) => {
   const { fireStoreDB, authState } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [shows, setShows] = useState<FirestoreShowType[]>([]);
+  const [loadingShows, setLoadingShows] = useState(true);
   const router = useRouter();
+
+  // Load shows for this band
+  useEffect(() => {
+    const loadBandShows = async () => {
+      try {
+        const bandShows = await getBandShowsService(fireStoreDB, code);
+        setShows(bandShows);
+      } catch (error) {
+        console.error('Error loading band shows:', error);
+        errorToast('Error', 'Failed to load shows for this band');
+      } finally {
+        setLoadingShows(false);
+      }
+    };
+
+    loadBandShows();
+  }, [code, fireStoreDB]);
 
   const handleDelete = async () => {
     setLoading(true);
@@ -97,6 +118,17 @@ const BandInfoScreen = ({ onButtonPress, code, info }: BandInfoScreenType) => {
       </View>
     );
   });
+  const shows_list = shows.map((show) => {
+    return (
+      <View
+        className="flex flex-row justify-between items-center self-stretch"
+        key={show.name}
+      >
+        <Text className="text-xl">{show.name}</Text>
+        <Text className="text-xl">{show.location}</Text>
+      </View>
+    );
+  });
   return (
     <View
       id="main-content"
@@ -116,6 +148,13 @@ const BandInfoScreen = ({ onButtonPress, code, info }: BandInfoScreenType) => {
           <Text className="font-semibold text-4xl">Members</Text>
           <Text className="text-xl">{info.owner}</Text>
           {members_list}
+        </View>
+        <View
+          id="shows"
+          className="flex flex-col px-2 justify-center items-start gap-2 self-stretch"
+        >
+          <Text className="font-semibold text-4xl">Shows</Text>
+          {shows_list}
         </View>
         <CustomButton
           text="Copy Code"
